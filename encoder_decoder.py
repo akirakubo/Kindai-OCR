@@ -76,7 +76,9 @@ class Encoder_Decoder(nn.Module):
     def f_init(self, x, x_mask=None):
         if x_mask is None:
             shape = x.shape
-            x_mask = torch.ones(shape).cuda()
+            x_mask = torch.ones(shape)
+            if self.cuda:
+                x_mask.cuda()
         ctx, _ctx_mask = self.encoder(x, x_mask)
         ctx_mean = ctx.mean(dim=3).mean(dim=2)
         init_state = self.init_GRU_model(ctx_mean)
